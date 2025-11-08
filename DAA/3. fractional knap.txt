@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    vector<pair<float, float>> items(n); // {value, weight}
+
+    cout << "Enter value and weight of each item:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> items[i].first >> items[i].second;
+    }
+
+    float capacity;
+    cout << "Enter capacity of knapsack: ";
+    cin >> capacity;
+
+    // Custom comparator for sorting by value/weight ratio (descending)
+    sort(items.begin(), items.end(), [](pair<float, float> a, pair<float, float> b) {
+        return (a.first / a.second) > (b.first / b.second);
+    });
+
+    float totalValue = 0;
+
+    for (int i = 0; i < n; i++) {
+        float value = items[i].first;
+        float weight = items[i].second;
+
+        if (weight <= capacity) {
+            totalValue += value;       // take full item
+            capacity -= weight;
+        } else {
+            totalValue += (value / weight) * capacity; // take fractional part
+            break;
+        }
+    }
+
+    cout << "\nMaximum value in knapsack = " << totalValue << endl;
+    return 0;
+}

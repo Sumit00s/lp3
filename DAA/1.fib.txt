@@ -1,0 +1,65 @@
+#include <iostream>
+#include <chrono>
+using namespace std;
+
+int step_recursive = 0, step_iterative = 0;
+
+// ---------- Recursive Fibonacci ----------
+int fib_recursive(int n) {
+    step_recursive++; // count each call
+    if (n <= 1)
+        return n;
+    return fib_recursive(n - 1) + fib_recursive(n - 2);
+}
+
+// ---------- Non-Recursive Fibonacci ----------
+void fib_non_recursive(int n) {
+    int n1 = 0, n2 = 1, n3;
+    cout << n1 << " " << n2 << " ";
+    for (int i = 2; i < n; ++i) {
+        step_iterative++; // count each iteration
+        n3 = n1 + n2;
+        cout << n3 << " ";
+        n1 = n2;
+        n2 = n3;
+    }
+    cout << endl;
+}
+
+// ---------- Main Function ----------
+int main() {
+    int n;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+
+    // Recursive Fibonacci
+    cout << "\nFibonacci Sequence (Recursive): ";
+    auto start1 = chrono::high_resolution_clock::now();
+    for (int i = 0; i < n; i++)
+        cout << fib_recursive(i) << " ";
+    auto end1 = chrono::high_resolution_clock::now();
+    auto time_recursive = chrono::duration_cast<chrono::microseconds>(end1 - start1).count();
+
+    // Non-Recursive Fibonacci
+    cout << "\n\nFibonacci Sequence (Non-Recursive): ";
+    auto start2 = chrono::high_resolution_clock::now();
+    fib_non_recursive(n);
+    auto end2 = chrono::high_resolution_clock::now();
+    auto time_iterative = chrono::duration_cast<chrono::microseconds>(end2 - start2).count();
+
+    // ---------- Output Results ----------
+    cout << "\n=== Time and Step Count Analysis ===\n";
+    cout << "Recursive Time Taken: " << time_recursive << " microseconds\n";
+    cout << "Recursive Step Count: " << step_recursive << "\n";
+    cout << "Recursive Time Complexity: O(2^n)\n";
+    cout << "Recursive Space Complexity: O(n)\n\n";
+
+    cout << "Non-Recursive Time Taken: " << time_iterative << " microseconds\n";
+    cout << "Non-Recursive Step Count: " << step_iterative << "\n";
+    cout << "Non-Recursive Time Complexity: O(n)\n";
+    cout << "Non-Recursive Space Complexity: O(1)\n";
+
+    return 0;
+}
+----------------------------------------------------------------------------------------------------------------------------
+
